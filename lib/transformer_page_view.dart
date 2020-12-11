@@ -524,8 +524,12 @@ class _TransformerPageViewState extends State<TransformerPageView> {
       _fromIndex = _activeIndex = _pageController.initialPage;
       if (!created) {
         int initPage = _pageController.getRealIndexFromRenderIndex(index);
-        _pageController.animateToPage(initPage,
-            duration: widget.duration, curve: widget.curve);
+        // safely scroll
+        if (_pageController.hasClients) {
+          _pageController.animateToPage(initPage, duration: widget.duration, curve: widget.curve);
+        } else {
+          print('No listeners on page controller detected. (transformer_page_view.dart)');
+        }
       }
     }
     if (_transformer != null)
